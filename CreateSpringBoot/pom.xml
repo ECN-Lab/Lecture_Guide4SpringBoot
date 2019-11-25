@@ -8,11 +8,11 @@
 		<version>2.2.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ntsphere.ecn</groupId>
-	<artifactId>Lecture_SpringBoot</artifactId>
+	<groupId>com.ntsphere.ecn.springboot</groupId>
+	<artifactId>CreateSpringBoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Lecture_SpringBoot</name>
+	<name>CreateSpringBoot</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
