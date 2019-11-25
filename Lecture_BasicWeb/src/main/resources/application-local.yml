@@ -1,0 +1,12 @@
+
+server:
+  datasource:
+    db1:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://ntsphere.co.kr:3306/ntsphere?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+      username: root
+      password: 3382
+      mapper-locations: classpath:/mybatis/sql1/**/*.xml
+    db2:
+      jndi-name: java:comp/env/jdbc/db2
+      mapper-locations: classpath:/mybatis/sql2/**/*.xml
