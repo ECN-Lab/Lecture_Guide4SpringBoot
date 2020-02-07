@@ -4,74 +4,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Paths;
-import java.util.HashMap;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import com.ntsphere.common.util.ObjectHashMap;
 import com.ntsphere.common.util.RestResponse;
-import com.ntsphere.ecn.basicweb.repository1.Query1;
-import com.ntsphere.ecn.basicweb.repository2.Query2;
 
 @Controller
-@RequestMapping("/api")
-public class RestApiController extends BaseController {
-	
-	@Autowired private Query1 query1;
-	@Autowired private Query2 query2;
-	
-	
-	
+@RequestMapping("/file")
+public class FileController extends BaseController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/add", method=RequestMethod.GET)
-	public int add(@RequestParam("val1") int val1, @RequestParam("val2") int val2) {
-		
-		int ret = val1 + val2;
-		return ret;
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value="/div", method=RequestMethod.GET)
-	public double div(HttpServletRequest request) {
-		
-		double val1 = Double.parseDouble(request.getParameter("val1"));
-		double val2 = Double.parseDouble(request.getParameter("val2"));
-		double ret = val1 / val2;
-		
-		return ret;
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value="/queryTest", method=RequestMethod.GET)
-	public ResponseEntity<?> getUserList() {
-		
-		HashMap<String, Object> res1 = query1.selectTest(null);
-		HashMap<String, Object> res2 = query2.selectTest(null);
-		
-		return RestResponse.ok()
-						.setData(ObjectHashMap.newInstance()
-									.add("res1", res1)
-									.add("res2", res2))
-						.responseEntity();
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value="/fileUpload", method=RequestMethod.POST)
+	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public ResponseEntity<?> fileUpload(MultipartHttpServletRequest request) {
 		
 		try {
@@ -109,7 +59,7 @@ public class RestApiController extends BaseController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/fileDownload", method=RequestMethod.GET)
+	@RequestMapping(value="/download", method=RequestMethod.GET)
 	public void fileDownload(HttpServletResponse response) throws Exception {
 		String originalFilename = "Filename.ext";
 		String sourcePath = "C:\\" + originalFilename;
@@ -121,9 +71,9 @@ public class RestApiController extends BaseController {
 		
 		try {
 			stream = new FileInputStream(fileHandle);
-
-			response.setCharacterEncoding("utf-8");
+			
 			response.setContentType("application/octet-stream");
+			response.setCharacterEncoding("utf-8");
 			response.setHeader("Content-Disposition", "attachment; filename=" + encodedFilename);
 			response.setHeader("Content-Transfer-Encoding", "binary");
 			response.setContentLength((int)fileHandle.length());

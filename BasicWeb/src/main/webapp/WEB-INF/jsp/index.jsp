@@ -14,4 +14,51 @@
 	<br/>
 	<span id="ui_result"></span>
 </body>
+<script type='text/javascript'>
+$(document).ready(function(){
+	console.log('RESTful API test page.');
+
+
+	//  Add button click event
+	$('#ui_btnAdd').on('click', function() {
+		console.log('Add button clicked.');
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/add',
+            data: {
+                val1: $('#ui_val1').val(),
+                val2: $('#ui_val2').val()
+            },
+            cache: false,
+            success: function (result) {
+                $('#ui_result').html('Result: ' + result);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+	});
+
+
+	//  Div button click event
+	$('#ui_btnDiv').on('click', function() {
+		console.log('Div button clicked.');
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/div',
+            data: {
+                val1: $('#ui_val1').val(),
+                val2: $('#ui_val2').val()
+            },
+            cache: false,
+            success: function (result) {
+                $('#ui_result').html('Result: ' + result);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+	});
+});
+</script>
 </html>

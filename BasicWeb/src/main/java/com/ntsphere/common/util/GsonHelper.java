@@ -66,7 +66,7 @@ public class GsonHelper
 	
 	public GsonHelper(String jsonText)
 	{
-		root = (new JsonParser()).parse(jsonText);
+		root = JsonParser.parseString(jsonText);
 		curNode = root;
 	}
 	
@@ -75,13 +75,13 @@ public class GsonHelper
 	{
 		if (obj instanceof String)
 		{
-			root = (new JsonParser()).parse(obj.toString());
+			root = JsonParser.parseString(obj.toString());
 			curNode = root;
 			return;
 		}
 		
 		String jsonText = (new Gson()).toJson(obj);
-		root = (new JsonParser()).parse(jsonText);
+		root = JsonParser.parseString(jsonText);
 		curNode = root;
 	}
 	
@@ -102,7 +102,7 @@ public class GsonHelper
 	
 	public String toString()
 	{
-		return root.toString();
+		return curNode.toString();
 	}
 	
 	
@@ -176,8 +176,15 @@ public class GsonHelper
 		int startIdx = 0;
 		
 		
-		if (paths.length == 0)
-			return (curNode == null ? null : curNode.getAsJsonObject());
+		if (paths.length == 0) {
+			if (curNode == null)
+				return null;
+			
+			if (curNode instanceof JsonArray)
+				return curNode.getAsJsonArray();
+			
+			return curNode.getAsJsonObject();
+		}
 
 		//  '/'로 시작하는 경우 root부터 탐색한다.
 		if (paths[0].length() == 0) {
@@ -186,7 +193,12 @@ public class GsonHelper
 		}
 		
 
-		JsonElement element = curNode.getAsJsonObject();
+		JsonElement element;
+		if (curNode instanceof JsonArray)
+			element = curNode.getAsJsonArray();
+		else
+			element = curNode.getAsJsonObject();
+		
 		for (int i = startIdx ; i < paths.length ; ++i)
 		{
 			try
@@ -228,10 +240,8 @@ public class GsonHelper
 	public <T> Collection<T> getArray(String path)
 	{
 		try {
-			Type type = (new TypeToken<Collection<T>>(){}).getType();
-			Gson gson = new Gson();
-			
-			return gson.fromJson(curNode, type);
+			Collection<Object> list = this.on(path).getArray();
+			return (Collection<T>) list;
 		}
 		catch (Exception e) {
 			return null;
